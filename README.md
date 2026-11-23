@@ -23,3 +23,4 @@ Windows, Python 3.9+, Claude Code (app de escritorio). No requiere administrador
 Cuando una sesión se hace pesada, di "Limpia la memoria de mensajes": la skill `skills/limpia-memoria-de-mensajes/SKILL.md` guarda lo duradero, escribe `TRASPASO.md` y abre una sesión limpia que continúa. Cópiala a `~/.claude/skills/`. Más en [GUIA_SESIONES.md](GUIA_SESIONES.md).
 
 Sin datos personales: contraseñas, claves y datos de la persona usuaria no forman parte del repositorio. Ver [SEGURIDAD.md](SEGURIDAD.md).
+- Guía detallada de la sesión directora: [GUIA_DIRECTORA.md](GUIA_DIRECTORA.md)
