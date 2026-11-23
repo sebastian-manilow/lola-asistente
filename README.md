@@ -5,21 +5,21 @@ Lola es una "directora" personal: una sesión de Claude Code que coordina otras 
 ## Cómo funciona
 - **Escucha local (0 tokens):** `voz/escucha.py` usa Vosk (offline). Al oír la palabra de activación ("Lola") envía lo que sigue a la ventana de Claude.
 - **Voz:** `voz/hablar.py` responde con voz neuronal (edge-tts, es-ES), en segundo plano.
-- **Personalidad y reglas:** [PERSONALIDAD.md](PERSONALIDAD.md) (tono, protocolo de conversación, límites).
-- **Dirección de sesiones:** [DIRECTOR.md](DIRECTOR.md) (patrón: un director + trabajadoras por área).
+- **Personalidad y reglas:** `PERSONALIDAD.md` (tono, protocolo de conversación, límites).
+- **Dirección de sesiones:** ver `DIRECTOR.md` (patrón: un director + trabajadores por área).
+
+## Índice
+[Instalación](#instalación-en-3-pasos) · [Configuración](config.example.json) · [Autolimpieza de contexto](#autolimpieza-de-contexto) · [Seguridad](SEGURIDAD.md) · [Guía de sesiones](GUIA_SESIONES.md) · [Personalidad](PERSONALIDAD.md) · [Director](DIRECTOR.md) · [Contribuir](CONTRIBUTING.md) · [Licencia MIT](LICENSE)
 
 ## Requisitos
-Windows, Python 3, `pip install vosk sounddevice edge-tts`, modelo Vosk español, Claude Code (app de escritorio).
+Windows, Python 3.9+, Claude Code (app de escritorio). No requiere administrador.
 
-Sin datos personales: contraseñas, claves y datos de la persona usuaria no forman parte del repositorio.
+## Instalación en 3 pasos
+1. Clona el repositorio: `git clone https://github.com/sebastian-manilow/lola-asistente.git`
+2. Ejecuta `powershell -ExecutionPolicy Bypass -File install.ps1` (instala dependencias, descarga el modelo Vosk y crea `config.json`).
+3. Ajusta `config.json` (palabra de activación, voz, micrófono) y arranca `python voz\escucha.py`.
 
-## Micro apps con IA para negocios
+## Autolimpieza de contexto
+Cuando una sesión se hace pesada, di "Limpia la memoria de mensajes": la skill `skills/limpia-memoria-de-mensajes/SKILL.md` guarda lo duradero, escribe `TRASPASO.md` y abre una sesión limpia que continúa. Cópiala a `~/.claude/skills/`. Más en [GUIA_SESIONES.md](GUIA_SESIONES.md).
 
-Demos ficticias y gratuitas de automatización para pequeños negocios:
-
-- [Carta digital con QR y pedido por WhatsApp](https://sebastian-manilow.github.io/demo-menu-qr/)
-- [Reservas de restaurante](https://sebastian-manilow.github.io/demo-reservas-restaurante/)
-- [Gestor de reseñas](https://sebastian-manilow.github.io/demo-resenas/)
-- [Asistente de citas por WhatsApp](https://sebastian-manilow.github.io/demo-automatizacion/)
-
-- Demos nuevas: [Citas para clínicas](https://sebastian-manilow.github.io/demo-citas-clinica/), [Presupuesto para taller](https://sebastian-manilow.github.io/demo-presupuesto-taller/), [Asistente de FAQ](https://sebastian-manilow.github.io/demo-faq-bot/)
+Sin datos personales: contraseñas, claves y datos de la persona usuaria no forman parte del repositorio. Ver [SEGURIDAD.md](SEGURIDAD.md).

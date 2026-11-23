@@ -4,10 +4,17 @@ import sounddevice as sd, vosk, win32gui, win32con, win32clipboard, pyautogui
 vosk.SetLogLevel(-1)
 
 D = os.path.dirname(os.path.abspath(__file__))
-DEV = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+try: CFG = json.load(open(os.path.join(D, "..", "config.json"), encoding="utf-8"))
+except Exception: CFG = {}
+DEV = int(sys.argv[1]) if len(sys.argv) > 1 else int(CFG.get("microfono", 1))
+SILENCIO = float(CFG.get("silencio_corte_s", 2.5))
+ESPERA_MAX = float(CFG.get("espera_max_s", 300))
+PALABRA = str(CFG.get("palabra_activacion", "lola")).lower()
+DESPEDIDA = CFG.get("frase_despedida", "Hasta luego. Aquí estaré cuando me llames.")
 LOG = open(os.path.join(D, f"escucha_{DEV}.log"), "a", encoding="utf-8")
 FLAG = os.path.join(D, "hablando.flag")   # existe mientras Lola habla
-DRY = os.path.join(D, "dry.flag")         # si existe: no envia, solo registra
+DRY = os.path.join(D, "dry.flag")
+if CFG.get("modo_seco"): open(DRY, "a").close()         # si existe: no envia, solo registra
 def log(s): LOG.write(time.strftime("%H:%M:%S ") + s + "\n"); LOG.flush()
 
 WAKE = re.compile(r"\b(lola|lolas|lo la|los la|hola la|ola la|y lo la|di lola|dilo la|el la|hola)\b")
@@ -116,7 +123,7 @@ def beep():
 
 MODEL = vosk.Model(os.path.join(D, "modelo_dl", "vosk-model-small-es-0.42"))
 rec = vosk.KaldiRecognizer(MODEL, 16000)
-wk = vosk.KaldiRecognizer(MODEL , 16000, '["lola", "hola", "lo la", "[unk]"]')
+wk = vosk.KaldiRecognizer(MODEL , 16000, json.dumps([PALABRA, "hola", "lo la", "[unk]"]))
 q = queue.Queue()
 dict_on = False; t0 = 0.0; last = 0.0; spoke = False
 wait_reply = time.time() + 86400; saw_flag = False
@@ -141,7 +148,7 @@ with sd.RawInputStream(device=DEV, samplerate=16000, blocksize=4000, dtype="int1
                 if not dict_on and not os.path.exists(FLAG):
                     wf = wk.AcceptWaveform(d)
                     wt = json.loads(wk.Result()).get("text", "") if wf else json.loads(wk.PartialResult()).get("partial", "")
-                    if re.search(r"(lola|lo la)", wt) and wf:
+                    if re.search(r"(lola|lo la)", wt) and wf:
                         try: os.remove(os.path.join(D, "pausa.flag"))
                         except Exception: pass
                         wk.Reset(); rec.Reset(); log("PAUSA terminada por Lola"); start()
@@ -158,7 +165,7 @@ with sd.RawInputStream(device=DEV, samplerate=16000, blocksize=4000, dtype="int1
                     wait_reply = 0; saw_flag = False; log("SIGUE conversacion"); time.sleep(0.6); rec.Reset(); start(True); continue
                 if now > wait_reply: wait_reply = 0; log("FIN espera respuesta")
             if long_on:
-                if now - long_last > 2.5:
+                if now - long_last > SILENCIO:
                     long_on = False; log("NOTA LARGA fin por silencio")
                     if long_buf: send("Nota de voz larga guardada en " + long_file + ". Léela entera, haz lo que te pido en ella y respóndeme por voz.")
                     wait_reply = time.time() + 600; saw_flag = False; continue
@@ -178,21 +185,21 @@ with sd.RawInputStream(device=DEV, samplerate=16000, blocksize=4000, dtype="int1
                 if BYE.search(txt):
                     dictar(False); time.sleep(0.8); limpiar(); dict_on = False; wait_reply = 0; rec.Reset()
                     log("ADIOS: " + txt); open(os.path.join(D, "hablando.flag"), "w").close()
-                    import subprocess; subprocess.Popen([sys.executable.replace("pythonw", "python"), os.path.join(D, "hablar.py"), "Hasta luego. Aquí estaré cuando me llames."], creationflags=0x08000000)
+                    import subprocess; subprocess.Popen([sys.executable.replace("pythonw", "python"), os.path.join(D, "hablar.py"), DESPEDIDA], creationflags=0x08000000)
                     continue
                 if fin and START_LONG.search(txt):
                     dictar(False); time.sleep(0.8); limpiar(); dict_on = False; long_on = True; long_buf = []; long_last = time.time()
                     long_file = os.path.join(D, "notas", time.strftime("%Y%m%d_%H%M%S") + ".txt")
                     log("NOTA LARGA inicio " + long_file); beep(); rec.Reset(); continue
-                if spoke and now - last > 2.5:          # silencio tras hablar -> enviar
+                if spoke and now - last > SILENCIO:          # silencio tras hablar -> enviar
                     dictar(False); enviar_dictado(); dict_on = False; muletilla(); rec.Reset()
                     wait_reply = time.time() + 86400; saw_flag = False; pend = time.time()
-                elif not spoke and now - t0 > 300:        # no dijo nada -> salir de conversacion
+                elif not spoke and now - t0 > ESPERA_MAX:        # no dijo nada -> salir de conversacion
                     dictar(False); dict_on = False; rec.Reset(); log("SIN voz, en espera de Lola")
                 continue
             wf = wk.AcceptWaveform(d)
             wt = json.loads(wk.Result()).get("text", "") if wf else json.loads(wk.PartialResult()).get("partial", "")
-            if re.search(r"(lola|lo la)", wt):
+            if re.search(r"(lola|lo la)", wt):
                 wk.Reset(); rec.Reset(); log("WAKE " + wt); start(); continue
             if rec.AcceptWaveform(d):
                 t = json.loads(rec.Result()).get("text", "").strip()

@@ -1,7 +1,5 @@
 __pycache__/
 *.log
 modelo_dl/
-cache/
-notas/
 clave*.txt
 *.flag

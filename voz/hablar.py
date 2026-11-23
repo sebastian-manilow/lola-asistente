@@ -3,7 +3,10 @@ D=os.path.dirname(os.path.abspath(__file__))
 FL=os.path.join(D,"hablando.flag")
 open(FL,"w").close()
 import asyncio, tempfile
-VOZ=os.environ.get("VOZ","es-ES-XimenaNeural")
+import json
+try: CFG=json.load(open(os.path.join(D,"..","config.json"),encoding="utf-8"))
+except Exception: CFG={}
+VOZ=os.environ.get("VOZ") or CFG.get("voz_tts","es-ES-XimenaNeural")
 txt = " ".join(sys.argv[1:])
 CD=os.path.join(D,"cache"); os.makedirs(CD,exist_ok=True)
 cf=os.path.join(CD,hashlib.md5((VOZ+txt).encode()).hexdigest()+".mp3")

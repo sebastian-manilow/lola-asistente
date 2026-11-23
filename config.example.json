@@ -1,0 +1,9 @@
+{
+  "palabra_activacion": "lola",
+  "voz_tts": "es-ES-XimenaNeural",
+  "microfono": 1,
+  "silencio_corte_s": 2.5,
+  "espera_max_s": 300,
+  "modo_seco": false,
+  "frase_despedida": "Hasta luego. Aquí estaré cuando me llames."
+}
