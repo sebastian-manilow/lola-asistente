@@ -21,3 +21,5 @@ Demos ficticias y gratuitas de automatización para pequeños negocios:
 - [Reservas de restaurante](https://sebastian-manilow.github.io/demo-reservas-restaurante/)
 - [Gestor de reseñas](https://sebastian-manilow.github.io/demo-resenas/)
 - [Asistente de citas por WhatsApp](https://sebastian-manilow.github.io/demo-automatizacion/)
+
+- Demos nuevas: [Citas para clínicas](https://sebastian-manilow.github.io/demo-citas-clinica/), [Presupuesto para taller](https://sebastian-manilow.github.io/demo-presupuesto-taller/), [Asistente de FAQ](https://sebastian-manilow.github.io/demo-faq-bot/)
