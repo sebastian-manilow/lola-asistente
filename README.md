@@ -1,6 +1,6 @@
 # Lola — asistente personal por voz sobre Claude Code
 
-Lola es una "directora" personal: una sesión de Claude Code que coordina otras sesiones de trabajo (búsqueda de empleo, vídeos, prospección de clientes) y se maneja por voz, sin teclear.
+Lola es una "directora" personal: una sesión de Claude Code que coordina otras sesiones de trabajo (una por cada área que definas) y se maneja por voz, sin teclear.
 
 ## Cómo funciona
 - **Escucha local (0 tokens):** `voz/escucha.py` usa Vosk (offline). Al oír la palabra de activación ("Lola") envía lo que sigue a la ventana de Claude.

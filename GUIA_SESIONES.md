@@ -1,7 +1,7 @@
 # Guía de sesiones: director + trabajadoras
 
 ## Patrón
-Una sesión **directora** (la única con la que hablas) y varias **trabajadoras**, una por área (empleo, vídeo, administración...). La directora reparte órdenes, vigila el estado y te da un informe corto.
+Una sesión **directora** (la única con la que hablas) y varias **trabajadoras**, una por área (área A, área B, administración...). La directora reparte órdenes, vigila el estado y te da un informe corto.
 
 ## Montaje
 1. Crea una carpeta por área con su propio `CLAUDE.md`.
