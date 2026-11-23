@@ -12,3 +12,12 @@ Lola es una "directora" personal: una sesión de Claude Code que coordina otras 
 Windows, Python 3, `pip install vosk sounddevice edge-tts`, modelo Vosk español, Claude Code (app de escritorio).
 
 Sin datos personales: contraseñas, claves y datos de la persona usuaria no forman parte del repositorio.
+
+## Micro apps con IA para negocios
+
+Demos ficticias y gratuitas de automatización para pequeños negocios:
+
+- [Carta digital con QR y pedido por WhatsApp](https://sebastian-manilow.github.io/demo-menu-qr/)
+- [Reservas de restaurante](https://sebastian-manilow.github.io/demo-reservas-restaurante/)
+- [Gestor de reseñas](https://sebastian-manilow.github.io/demo-resenas/)
+- [Asistente de citas por WhatsApp](https://sebastian-manilow.github.io/demo-automatizacion/)
